@@ -8,10 +8,12 @@ public class ChatClient
    private static Socket clientRead;
    private static boolean running1=true;
    private static boolean running2=true;
-
    private static ThreadReceive thread1;
    private static ThreadSend thread2;
-private static Ciphers cipher = new CaesarCipher();
+   private static int cipherNum;
+   private static Ciphers cipher; = new CaesarCipher();
+
+
    public static void main(String args [])
    { 
       try
@@ -19,8 +21,22 @@ private static Ciphers cipher = new CaesarCipher();
 
          String serverName = args[0];
          int port = Integer.parseInt(args[1]);
-   
-     
+         cipherNum = args[2];
+         
+         switch(cipherNum)
+         {
+            case 0: //cipher = plainTextCipher;  //replace with plain text cypher
+            break;
+
+            case 1: cipher = new CaesarCipher();
+            break;
+
+            case 2: //cipher = new AESCipher();  //AESCipher needs to be supported by the ciphers interface
+            break;
+         }
+
+        
+
          boolean running = true;
 
          System.out.println("Connecting to " + serverName + " on port " + port);
@@ -79,7 +95,7 @@ private static Ciphers cipher = new CaesarCipher();
             while(running1)
             {
                String message = "";
-                 System.out.println("");
+               System.out.println("");
                message = ui.nextLine();
                System.out.println("");
 
