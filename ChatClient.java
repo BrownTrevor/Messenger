@@ -11,7 +11,7 @@ public class ChatClient
    private static ThreadReceive thread1;
    private static ThreadSend thread2;
    private static int cipherNum;
-   private static Ciphers cipher; = new CaesarCipher();
+   private static Ciphers cipher; 
 
 
    public static void main(String args [])
@@ -25,13 +25,17 @@ public class ChatClient
          
          switch(cipherNum)
          {
-            case 0: //cipher = plainTextCipher;  //replace with plain text cypher
+            case 0: //cipher = plainTextCipher;  //replace with plain text cipher
             break;
 
             case 1: cipher = new CaesarCipher();
             break;
 
             case 2: //cipher = new AESCipher();  //AESCipher needs to be supported by the ciphers interface
+            break;
+
+            case default: //cipher = plainTextCipher;
+               System.out.println("Invalid cipher choice. Defaulting to plain text...");
             break;
          }
 
@@ -74,11 +78,11 @@ public class ChatClient
       }
       catch(IndexOutOfBoundsException e)
       {
-         System.out.println("Provide a valid server name and port as arguments...");
+         System.out.println("Too many arguments provided on command line...");
       }
       catch(NumberFormatException e)
       {
-         System.out.println("Provide a valid port as argument...");
+         System.out.println("Error initializing ChatClient\njava ChatClient [ServerName] [ServerPortNumber] [Cipher Number]");
       }
    }
    private static class ThreadSend extends Thread
@@ -174,10 +178,8 @@ public class ChatClient
          {
             System.out.println("Error closing socket...");
          }
+
       }
-
-
-
 
    }
 
