@@ -11,7 +11,6 @@ public class CaesarCipher implements Ciphers
       {
          temp +=(int)letters[i] + ",";
       }
-      System.out.println(temp);
       return temp;
    }
    public String decrypt(String msg)
@@ -20,8 +19,14 @@ public class CaesarCipher implements Ciphers
       String temp = new String("");
       for(int i =0; i<items.size(); i++)
       {
-         int l = Integer.parseInt(items.get(i));
-         temp+= (char)l;
+         try
+         {
+            int l = Integer.parseInt(items.get(i));
+            temp+= (char)l;
+         }
+         catch(Exception e)
+         {
+         }
       }
       return temp;
    }
