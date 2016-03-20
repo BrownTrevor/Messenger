@@ -53,7 +53,7 @@ public class AESCipher implements Ciphers {
       }
       catch(Exception e)
       {
-         return"Invalid Message to decrypt";
+         return val;
       }
    }
 }

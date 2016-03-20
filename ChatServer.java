@@ -9,7 +9,7 @@ public class ChatServer extends Thread
    private static ArrayList<Socket> clients = new ArrayList<Socket>();
    private static ArrayList<DataOutputStream> outs;
    private static ArrayList<DataInputStream> ins;
-
+   private static ArrayList<String> names = new ArrayList<String>();
 
 
 
@@ -37,11 +37,11 @@ public class ChatServer extends Thread
             Socket server = ss.accept();
             clients.add(server);
             
-            System.out.println("Connection established between server socket and " 
-               + server.getRemoteSocketAddress());
 
             if(clients.size()%2==1)
             {
+               System.out.println("Connection established between server socket and " 
+               + server.getRemoteSocketAddress());
                DataOutputStream out = new DataOutputStream(server.getOutputStream());
                out.writeUTF("Thanks for connecting to " + server.getLocalSocketAddress() 
                   + "\n\tPlease wait for other clients to connect...");
@@ -52,6 +52,7 @@ public class ChatServer extends Thread
          {
             System.out.println("Socket timed out!");
             System.out.println("All clients accepted...");
+
             break;
             
          }
@@ -82,7 +83,14 @@ public class ChatServer extends Thread
             outs.add(new DataOutputStream(clients.get(i).getOutputStream()));
             ins.add(new DataInputStream(clients.get(i).getInputStream()));
          }
-
+         for(int i = 0; i < ins.size()-1; i+=2)
+         {
+            names.add(ins.get(i).readUTF())  ;
+         }
+         for(int i = 0; i < outs.size(); i++)
+         {
+            outs.get(i).writeUTF(names.get((i-1)/2) + ", your Brown Panda Messenger chat session has begun. Type your message and then press 'Enter' to send.\n");
+         }
          System.out.println("\nLogging User Chat...\n");
          while(running && clients.size() !=0)
          {
@@ -109,6 +117,10 @@ public class ChatServer extends Thread
                   System.out.println("Removing socket "+ i);
                   ins.remove(i);
                   outs.remove(i);
+                  if(ins.size()==0)
+                  {
+                     System.exit(0);
+                  }
                }
             }
 

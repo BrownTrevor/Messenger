@@ -11,7 +11,8 @@ public class ChatClient
    private static ThreadReceive thread1;
    private static ThreadSend thread2;
    private static int cipherNum;
-   private static Ciphers cipher; 
+   private static Ciphers cipher;
+   private static String name; 
 
 
    public static void main(String args [])
@@ -39,14 +40,21 @@ public class ChatClient
             break;
          }
 
-        
-
          boolean running = true;
 
          System.out.println("Connecting to " + serverName + " on port " + port);
          clientWrite = new Socket(serverName, port);
          clientRead = new Socket(serverName, port);
          System.out.println("Successfully connected to " + clientWrite.getRemoteSocketAddress());
+         System.out.println();
+         OutputStream outToServer = clientWrite.getOutputStream();
+         DataOutputStream out = new DataOutputStream(outToServer);
+         System.out.println("Please enter your name: ");
+         Scanner sc = new Scanner(System.in);
+         name =sc.nextLine();
+         out.writeUTF(name);
+         System.out.println();
+         System.out.println("Thanks for choosing Brown Panda Messaging, " + name);
          System.out.println();
     /*     OutputStream outToServer2 = clientWrite.getOutputStream();
          DataOutputStream out2 = new DataOutputStream(outToServer2);
@@ -65,18 +73,11 @@ public class ChatClient
 
          
       }
-      catch(IOException ioe)
+      catch(Exception e)
       {
-         ioe.printStackTrace();
+         System.out.println("Please enter valid inputs to start messaging. Choose 0 for Blank Cipher, 1 for Caesar Cipher, or 2 for AESCipher. The format for starting a client is: java ChatClient 'server name' 'server port number' 'cipher number'. Please try again.");
       }
-      catch(IndexOutOfBoundsException e)
-      {
-         System.out.println("Too many arguments provided on command line...");
-      }
-      catch(NumberFormatException e)
-      {
-         System.out.println("Error initializing ChatClient\njava ChatClient [ServerName] [ServerPortNumber] [Cipher Number]");
-      }
+      
    }
    private static class ThreadSend extends Thread
    {
@@ -96,14 +97,15 @@ public class ChatClient
 
                if(message.equals("QUIT"))
                {
-                  running1 = false;
-                  out.writeUTF(clientWrite.getLocalSocketAddress() + ": Goodbye!");
+                  System.out.println("Goodbye!");
+                  out.writeUTF(cipher.encrypt(name+ " has left the chat."));
+                  System.exit(0);
                   break;
                }
                else if(!message.equals(null)&&!message.equals(""))
                {
 
-                  out.writeUTF(cipher.encrypt(clientWrite.getLocalSocketAddress() + ": " +message));
+                  out.writeUTF(cipher.encrypt(name+ ": " +message));
                }
                
             }
@@ -150,7 +152,8 @@ public class ChatClient
                   }
                }catch(IOException ioe)
                {
-                  System.out.println("Exited in loop");
+                  System.out.println("Someone has left the chat, so your session has ended. Thanks for trying Brown Panda Messaging!");
+                  System.exit(0);
                   running2 =false;
                }
             }
