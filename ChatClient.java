@@ -92,10 +92,7 @@ public class ChatClient
             while(running1)
             {
                String message = "";
-               if(ui.hasNext())
-               {
-                  message = ui.next();
-               }
+                  message = ui.nextLine();
 
                if(message.equals("QUIT"))
                {
@@ -149,8 +146,7 @@ public class ChatClient
                   String recieved = in.readUTF();
                   if(recieved!=null && recieved!="")
                   {
-                     System.out.println();
-                     System.out.print(cipher.decrypt(recieved));
+                     System.out.println(cipher.decrypt(recieved));
                   }
                }catch(IOException ioe)
                {
