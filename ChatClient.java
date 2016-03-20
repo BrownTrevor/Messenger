@@ -21,21 +21,21 @@ public class ChatClient
 
          String serverName = args[0];
          int port = Integer.parseInt(args[1]);
-         cipherNum = args[2];
+         cipherNum = Integer.parseInt(args[2]);
          
          switch(cipherNum)
          {
-            case 0: //cipher = plainTextCipher;  //replace with plain text cipher
+            case 0: cipher = new BlankCipher();  //replace with plain text cipher
             break;
 
             case 1: cipher = new CaesarCipher();
             break;
 
-            case 2: //cipher = new AESCipher();  //AESCipher needs to be supported by the ciphers interface
+            case 2: cipher = new AESCipher();  //AESCipher needs to be supported by the ciphers interface
             break;
 
-            case default: //cipher = plainTextCipher;
-               System.out.println("Invalid cipher choice. Defaulting to plain text...");
+            default: //cipher = plainTextCipher;
+               System.out.println("Invalid cipher choice. Choose 0 for Blank Cipher, 1 for Caesar Cipher, or 2 for AESCipher. The format for starting a client is: java ChatClient 'server name' 'server port number' 'cipher number'. Please try again.");
             break;
          }
 
@@ -47,19 +47,12 @@ public class ChatClient
          clientWrite = new Socket(serverName, port);
          clientRead = new Socket(serverName, port);
          System.out.println("Successfully connected to " + clientWrite.getRemoteSocketAddress());
-         InputStream inFromServer1 = clientWrite.getInputStream();
-         DataInputStream in1 = new DataInputStream(inFromServer1);
-
-         OutputStream outToServer2 = clientRead.getOutputStream();
+         System.out.println();
+    /*     OutputStream outToServer2 = clientWrite.getOutputStream();
          DataOutputStream out2 = new DataOutputStream(outToServer2);
          
-         InputStream inFromServer2 = clientWrite.getInputStream();
-         DataInputStream in2 = new DataInputStream(inFromServer2);
-
-
-         System.out.println("Server says \"" + in1.readUTF() + "\"");
-         System.out.println(in1.readUTF());
-         System.out.println(in1.readUTF());
+         InputStream inFromServer2 = clientRead.getInputStream();
+         DataInputStream in2 = new DataInputStream(inFromServer2); */
 
 
         
@@ -99,9 +92,10 @@ public class ChatClient
             while(running1)
             {
                String message = "";
-               System.out.println("");
-               message = ui.nextLine();
-               System.out.println("");
+               if(ui.hasNext())
+               {
+                  message = ui.next();
+               }
 
                if(message.equals("QUIT"))
                {
@@ -156,7 +150,7 @@ public class ChatClient
                   if(recieved!=null && recieved!="")
                   {
                      System.out.println();
-                     System.out.println(cipher.decrypt(recieved));
+                     System.out.print(cipher.decrypt(recieved));
                   }
                }catch(IOException ioe)
                {

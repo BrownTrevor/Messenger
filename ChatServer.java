@@ -23,7 +23,7 @@ public class ChatServer extends Thread
    public void run()
    {
       int count = 0;
-
+      System.out.println("Starting up a new chat server for Brown Panda Messenger.");
       while(true)
       {
          count ++; 
@@ -32,13 +32,14 @@ public class ChatServer extends Thread
          {
             //Set up
             //Prints the server's port number
-            System.out.println("Wating for client on port "+ ss.getLocalPort() + "...");
+            System.out.println("Waiting for people to join the chat.");
             //waits for a connection to be made to the server socket
             Socket server = ss.accept();
             clients.add(server);
             
             System.out.println("Connection established between server socket and " 
                + server.getRemoteSocketAddress());
+
             if(clients.size()%2==1)
             {
                DataOutputStream out = new DataOutputStream(server.getOutputStream());
@@ -80,21 +81,6 @@ public class ChatServer extends Thread
    
             outs.add(new DataOutputStream(clients.get(i).getOutputStream()));
             ins.add(new DataInputStream(clients.get(i).getInputStream()));
-         }
-         
-         for(int i = 0; i < outs.size(); i++)
-         {
-            DataOutputStream temp = outs.get(i);
-            temp.writeUTF("\nChat Started...\nType QUIT to exit\nChat Members:");
-
-            String clientNames ="";
-
-            for(Socket c : clients)
-            {
-               clientNames += c.getRemoteSocketAddress();
-               clientNames += "\n";
-            }
-            temp.writeUTF(clientNames);
          }
 
          System.out.println("\nLogging User Chat...\n");

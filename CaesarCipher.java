@@ -1,34 +1,28 @@
 
+import java.util.List;
+import java.util.Arrays;
 public class CaesarCipher implements Ciphers
 {
    public String encrypt(String msg)
    {
       char[] letters = msg.toCharArray();
+      String temp = new String("");
       for(int i =0; i<msg.length(); i++)
       {
-         int temp =(int)letters[i];
-         if(temp>=118)
-         {
-            temp-=118;
-            System.out.println(temp);
-         }
-         letters[i] = (char)(temp + 10);
+         temp +=(int)letters[i] + ",";
       }
-      return new String(letters);
+      System.out.println(temp);
+      return temp;
    }
    public String decrypt(String msg)
    {
-      char[] letters = msg.toCharArray();
-      for(int i =0; i<letters.length; i++)
+      List<String> items = Arrays.asList(msg.split("\\s*,\\s*"));
+      String temp = new String("");
+      for(int i =0; i<items.size(); i++)
       {
-         int temp =(int)letters[i];
-         if(temp<10)
-         {
-            temp+=118;
-            System.out.println(temp);
-         }
-         letters[i] = (char)(temp - 10);
+         int l = Integer.parseInt(items.get(i));
+         temp+= (char)l;
       }
-      return new String(letters);
+      return temp;
    }
 }
